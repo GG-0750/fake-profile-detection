@@ -1,0 +1,135 @@
+/* Splash Screen Styles */
+.splash-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.splash-logo {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #ff3131; /* Alert Red */
+  letter-spacing: -3px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255, 49, 49, 0.5);
+}
+
+/* Main Home Styles */
+.home-container {
+  min-height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at center, #2e0a0a 0%, #000000 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid rgba(255, 49, 49, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h2 {
+  color: #ff3131;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.hero {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.glass-card {
+  background: rgba(20, 2, 2, 0.6);
+  backdrop-filter: blur(15px);
+  padding: 3rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 49, 49, 0.3);
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.glass-card h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to bottom, #fff, #ff3131);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-card p {
+  color: #a1a1a1;
+  margin-bottom: 2rem;
+}
+
+.styled-input {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #441111;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.styled-input:focus {
+  outline: none;
+  border: 1px solid #ff3131;
+  background: rgba(255, 49, 49, 0.05);
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.analyze-btn {
+  width: 100%;
+  padding: 16px;
+  margin-top: 24px;
+  background: #ff3131;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  box-shadow: 0 0 15px rgba(255, 49, 49, 0.4);
+}
+
+.analyze-btn:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 49, 49, 0.6);
+}
+
+/* Animation */
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.98); }
+}

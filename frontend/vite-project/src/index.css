@@ -1,0 +1,23 @@
+:root {
+  font-family: 'Inter', system-ui, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+
+/* Kill browser defaults and Vite flex-centering */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0f0505; /* Deep black-red tint */
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box; /* Fixes the margin/padding leak */
+}
