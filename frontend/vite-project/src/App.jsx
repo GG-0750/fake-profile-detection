@@ -27,51 +27,71 @@ function App() {
     });
   };
 
-  const handleAnalyze = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setResult(null);
+    const handleAnalyze = async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      setResult(null);
 
-    // Normalization: Converts raw counts into 0.0 - 1.0 range for the ML Brain
-    const normalize = (val, max = 5000) => Math.min(parseFloat(val) / max, 1);
+      const username = formData.username;
+      const followers = parseFloat(formData.followers) || 0;
+      const following = parseFloat(formData.following) || 0;
 
-    try {
-      const response = await fetch("http://localhost:5000/api/check-profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          platform: "instagram",
-          username: formData.username,
-          stats: {
-            edge_followed_by: normalize(formData.followers),
-            edge_follow: normalize(formData.following),
-            username_length: formData.username.length,
-            username_has_number: /\d/.test(formData.username) ? 1 : 0,
-            full_name_has_number: 0, 
-            full_name_length: 10,     
-            is_private: formData.isPrivate ? 1 : 0,
-            is_joined_recently: 0,
-            has_channel: 0,
-            is_business_account: 0,
-            has_guides: 0,
-            has_external_url: 0
-          }
-        }),
-      });
+      // --- SMART FEATURE EXTRACTION ---
+      const username_length = username.length;
+      const username_has_number = /\d/.test(username) ? 1 : 0;
+      
+      // 1. Guess Full Name stats based on username
+      const full_name_length = Math.max(username_length - 2, 5); 
+      const full_name_has_number = username_has_number; // Bots usually repeat numbers in both fields
 
-      const json = await response.json();
-      if (json.success) {
-        setResult(json.data);
-      } else {
-        alert("Error: " + json.error);
+      // 2. Logic-based guesses for binary features
+      // If a name is very long and has numbers, it's likely a "Recent" or "Business" bot account
+      const is_joined_recently = (username_has_number && username_length > 12) ? 1 : 0;
+      const is_business_account = (followers > 1000 && !formData.isPrivate) ? 1 : 0;
+      
+      // 3. Set rare features to 0 (most common state)
+      const has_channel = 0;
+      const has_guides = 0;
+      
+      // 4. External URL (Real IDs with many followers often have one)
+      const has_external_url = (followers > 500 && !username_has_number) ? 1 : 0;
+
+      // Normalization for ML model
+      const normalize = (val, max = 5000) => Math.min(val / max, 1);
+
+      try {
+        const response = await fetch("http://localhost:5000/api/check-profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            platform: "instagram",
+            username: username,
+            stats: {
+              edge_followed_by: normalize(followers),
+              edge_follow: normalize(following),
+              username_length: username_length,
+              username_has_number: username_has_number,
+              full_name_has_number: full_name_has_number,
+              full_name_length: full_name_length,
+              is_private: formData.isPrivate ? 1 : 0,
+              is_joined_recently: is_joined_recently,
+              has_channel: has_channel,
+              is_business_account: is_business_account,
+              has_guides: has_guides,
+              has_external_url: has_external_url
+            }
+          }),
+        });
+
+        const json = await response.json();
+        if (json.success) setResult(json.data);
+        else alert("Error: " + json.error);
+      } catch (err) {
+        alert("Backend server is not running!");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Connection error:", err);
-      alert("Backend server is not running on port 5000!");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   if (showSplash) {
     return (
