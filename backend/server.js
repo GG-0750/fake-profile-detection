@@ -4,6 +4,7 @@ const { spawn } = require("child_process");
 const path = require("path");
 
 const app = express();
+// Use 5000 as default, but allow environment variables
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -15,7 +16,7 @@ app.get("/", (req, res) => {
   res.json({
     message: "Fake Profile Detector API",
     status: "ML Connected",
-    version: "1.1.0",
+    version: "1.2.0",
     timestamp: new Date().toISOString()
   });
 });
@@ -31,29 +32,30 @@ app.post("/api/check-profile", (req, res) => {
     }
 
     /**
-     * IMPORTANT: The feature array must match the 12-feature order 
-     * defined in your ML model training exactly.
+     * CRITICAL: Feature Mapping
+     * This array matches your 95% accuracy model training order.
+     * Do not change this order.
      */
     const featureOrder = [
-      stats.edge_followed_by || 0,
-      stats.edge_follow || 0,
-      stats.username_length || 0,
-      stats.username_has_number || 0,
-      stats.full_name_has_number || 0,
-      stats.full_name_length || 0,
-      stats.is_private || 0,
-      stats.is_joined_recently || 0,
-      stats.has_channel || 0,
-      stats.is_business_account || 0,
-      stats.has_guides || 0,
-      stats.has_external_url || 0
+      stats.edge_followed_by || 0,     // 1
+      stats.edge_follow || 0,          // 2
+      stats.username_length || 0,      // 3
+      stats.username_has_number || 0,   // 4
+      stats.full_name_has_number || 0, // 5
+      stats.full_name_length || 0,     // 6
+      stats.is_private || 0,           // 7
+      stats.is_joined_recently || 0,   // 8
+      stats.has_channel || 0,          // 9
+      stats.is_business_account || 0,  // 10
+      stats.has_guides || 0,           // 11
+      stats.has_external_url || 0      // 12
     ];
 
-    // Path to your Python script
-    const pythonScript = path.join(__dirname, "../ml/predict.py");
+    // Use absolute path to ensure Python finds the script regardless of where you start the server
+    const pythonScript = path.resolve(__dirname, "../ml/predict.py");
 
     // Spawn Python Process
-    // Note: Use 'python3' if on Mac/Linux or 'python' on Windows
+    // Passing featureOrder mapped to Strings as command line arguments
     const pythonProcess = spawn("python", [pythonScript, ...featureOrder.map(String)]);
 
     let resultData = "";
@@ -69,7 +71,7 @@ app.post("/api/check-profile", (req, res) => {
 
     pythonProcess.on("close", (code) => {
       if (code !== 0) {
-        console.error("Python Error Output:", errorData);
+        console.error("ML Error Output:", errorData);
         return res.status(500).json({ 
           success: false, 
           error: "ML Model execution failed",
@@ -79,20 +81,21 @@ app.post("/api/check-profile", (req, res) => {
 
       // Parse the "pred|conf" string from predict.py
       const output = resultData.trim().split("|");
+      
       if (output.length < 2) {
         return res.status(500).json({ success: false, error: "Invalid ML output format" });
       }
 
-      const prediction = parseFloat(output[0]); // 1.0 for Fake, 0.0 for Genuine
+      const prediction = parseFloat(output[0]); // 1.0 = Fake, 0.0 = Genuine
       const confidence = parseFloat(output[1]);
 
       res.status(200).json({
         success: true,
         data: {
-          platform,
-          username,
+          platform: platform || "Instagram",
+          username: username || "Unknown",
           isFake: prediction === 1.0,
-          riskScore: (confidence * 100).toFixed(2), // Convert probability to 0-100 scale
+          riskScore: (confidence * 100).toFixed(2), // 0 to 100%
           status: prediction === 1.0 ? "Fake" : "Genuine",
           checkedAt: new Date().toISOString()
         }
@@ -114,4 +117,5 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 Backend integrated with ML!`);
   console.log(`📡 API is live at http://localhost:${PORT}`);
+  console.log(`📂 ML Script Path: ${path.resolve(__dirname, "../ml/predict.py")}`);
 });

@@ -9,6 +9,7 @@ df = pd.read_csv("final-v1.csv")
 # Features and target
 X = df.drop('is_fake', axis=1)
 y = df['is_fake']
+print(X.columns.tolist())
 
 # Split data
 X_train, X_test, y_train, y_test = train_test_split(
@@ -18,7 +19,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Train model
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
-
 # Prediction
 y_pred = model.predict(X_test)
 

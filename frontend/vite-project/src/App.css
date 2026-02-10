@@ -1,4 +1,4 @@
-/* Splash Screen Styles */
+/* Splash Screen */
 .splash-container {
   height: 100vh;
   width: 100vw;
@@ -13,37 +13,34 @@
 }
 
 .splash-logo {
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 900;
-  color: #ff3131; /* Alert Red */
-  letter-spacing: -3px;
+  color: #ff3131;
+  letter-spacing: -2px;
   text-transform: uppercase;
-  text-shadow: 0 0 20px rgba(255, 49, 49, 0.5);
+  text-shadow: 0 0 30px rgba(255, 49, 49, 0.6);
 }
 
-/* Main Home Styles */
+/* Layout */
 .home-container {
   min-height: 100vh;
   width: 100%;
-  background: radial-gradient(circle at center, #2e0a0a 0%, #000000 100%);
+  background: radial-gradient(circle at center, #1a0505 0%, #000000 100%);
   color: white;
   display: flex;
   flex-direction: column;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .navbar {
-  padding: 1.2rem 2rem;
-  border-bottom: 1px solid rgba(255, 49, 49, 0.2);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(255, 49, 49, 0.15);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.navbar h2 {
-  color: #ff3131;
-  margin: 0;
-  font-size: 1.5rem;
-}
+.navbar h2 { color: #ff3131; font-size: 1.2rem; margin: 0; }
 
 .hero {
   flex: 1;
@@ -53,87 +50,112 @@
   padding: 2rem;
 }
 
+/* Card UI */
 .glass-card {
-  background: rgba(20, 2, 2, 0.6);
-  backdrop-filter: blur(15px);
-  padding: 3rem;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 49, 49, 0.3);
+  background: rgba(15, 2, 2, 0.7);
+  backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 49, 49, 0.2);
   width: 100%;
-  max-width: 480px;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  max-width: 450px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
 .glass-card h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.2rem;
+  margin-bottom: 8px;
   background: linear-gradient(to bottom, #fff, #ff3131);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.glass-card p {
-  color: #a1a1a1;
-  margin-bottom: 2rem;
-}
+.glass-card p { color: #888; margin-bottom: 1.5rem; }
 
+/* Inputs */
 .styled-input {
   width: 100%;
   padding: 14px;
   margin: 8px 0;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid #441111;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #331111;
   border-radius: 12px;
   color: white;
-  font-size: 1rem;
-  transition: border 0.3s;
+  transition: 0.3s;
 }
 
 .styled-input:focus {
   outline: none;
-  border: 1px solid #ff3131;
+  border-color: #ff3131;
   background: rgba(255, 49, 49, 0.05);
 }
 
-.input-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+  color: #ccc;
+  font-size: 0.9rem;
 }
 
+/* Buttons */
 .analyze-btn {
   width: 100%;
   padding: 16px;
-  margin-top: 24px;
+  margin-top: 15px;
   background: #ff3131;
   color: white;
-  font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 700;
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: 0.3s;
   text-transform: uppercase;
-  box-shadow: 0 0 15px rgba(255, 49, 49, 0.4);
 }
 
 .analyze-btn:hover {
   background: #cc0000;
   transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(255, 49, 49, 0.6);
+  box-shadow: 0 10px 20px rgba(255, 49, 49, 0.3);
 }
 
-/* Animation */
-.animate-pulse {
-  animation: pulse 1.5s ease-in-out infinite;
+.analyze-btn.secondary { background: transparent; border: 1px solid #444; margin-top: 20px; }
+
+/* Result Cards */
+.result-card {
+  margin-top: 10px;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: left;
 }
 
-.result-card { margin-top: 20px; padding: 15px; border-radius: 10px; background: rgba(255,255,255,0.1); }
-.fake { border: 2px solid #ff4d4d; color: #ff4d4d; }
-.genuine { border: 2px solid #4dff88; color: #4dff88; }
+.result-card.fake { background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131; }
+.result-card.genuine { background: rgba(49, 255, 136, 0.1); border: 1px solid #31ff88; }
 
+.result-header { display: flex; justify-content: space-between; align-items: center; }
+.badge { font-size: 0.8rem; font-weight: bold; padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.3); }
+
+.score-box {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+}
+
+.score-value { font-size: 2.5rem; font-weight: 900; color: #ff3131; }
+.genuine .score-value { color: #31ff88; }
+
+.details { font-size: 0.85rem; color: #aaa; line-height: 1.6; }
+
+/* Animations */
+.animate-pulse { animation: pulse 2s infinite; }
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(0.98); }
+  50% { opacity: 0.6; transform: scale(0.95); }
 }
